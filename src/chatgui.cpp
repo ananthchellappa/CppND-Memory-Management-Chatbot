@@ -63,6 +63,7 @@ void ChatBotFrame::OnEnter(wxCommandEvent &WXUNUSED(event))
 
     // send user text to chatbot 
      _panelDialog->GetChatLogicHandle()->SendMessageToChatbot(std::string(userText.mb_str()));
+     // mb_str is a wxWidgets onboard function 
 }
 
 BEGIN_EVENT_TABLE(ChatBotFrameImagePanel, wxPanel)
@@ -118,7 +119,8 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
     ////
 
     // create chat logic instance
-    _chatLogic = new ChatLogic(); 
+    // _chatLogic = new ChatLogic();
+    _chatLogic = std::make_unique<ChatLogic>(); // AC add
 
     // pass pointer to chatbot dialog so answers can be displayed in GUI
     _chatLogic->SetPanelDialogHandle(this);
@@ -135,7 +137,8 @@ ChatBotPanelDialog::~ChatBotPanelDialog()
     //// STUDENT CODE
     ////
 
-    delete _chatLogic;
+    // delete _chatLogic;  // since this is now a unique_ptr, it shouldn't need a delete
+    delete _dialogSizer;
 
     ////
     //// EOF STUDENT CODE
@@ -196,6 +199,8 @@ ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent, wxString text, b
 {
     // retrieve image from chatbot
     wxBitmap *bitmap = isFromUser == true ? nullptr : ((ChatBotPanelDialog*)parent)->GetChatLogicHandle()->GetImageFromChatbot(); 
+    // here we have to decide what we want to do - load image from chatbot when message is from chatbot
+    // or display proprietary bitmap for the user image
 
     // create image and text
     _chatBotImg = new wxStaticBitmap(this, wxID_ANY, (isFromUser ? wxBitmap(imgBasePath + "user.png", wxBITMAP_TYPE_PNG) : *bitmap), wxPoint(-1, -1), wxSize(-1, -1));

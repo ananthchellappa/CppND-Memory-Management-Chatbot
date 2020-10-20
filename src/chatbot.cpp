@@ -37,7 +37,7 @@ ChatBot::~ChatBot()
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
-        delete _image;
+        delete _image;  // causing the segmentation fault. Why?
         _image = NULL;
     }
 }

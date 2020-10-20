@@ -4,14 +4,14 @@
 GraphNode::GraphNode(int id)
 {
     _id = id;
+    _chatBot = nullptr;    // AC add
 }
 
 GraphNode::~GraphNode()
 {
     //// STUDENT CODE
     ////
-
-    delete _chatBot; 
+    // delete _chatBot;     // this is always deleted by the ChatLogic.. 
 
     ////
     //// EOF STUDENT CODE
