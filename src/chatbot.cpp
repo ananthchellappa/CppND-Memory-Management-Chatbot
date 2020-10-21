@@ -15,6 +15,7 @@ ChatBot::ChatBot()
     _image = nullptr;
     _chatLogic = nullptr;
     _rootNode = nullptr;
+    // AC : what about _currentNode????
 }
 
 // constructor WITH memory allocation
@@ -47,19 +48,20 @@ ChatBot::~ChatBot()
 ChatBot::ChatBot( const ChatBot &source ){   // copy constructor
     std::cout << "ChatBot copy constructor" << std::endl;
     _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
-    _chatLogic = source._chatLogic;
-    _rootNode = source._rootNode;
+    _chatLogic = new ChatLogic( *source._chatLogic );     // why is it not *source here? because 
+    _rootNode = new GraphNode( *source._rootNode );       // _image is a pointer? but so are _chatlogic and _rootNode..
+    _currentNode = new GraphNode( *source._currentNode );    // using copy constructor!
 }
 
 ChatBot & ChatBot::operator=(const ChatBot &source){  // copy assignment
     std::cout << "ChatBot copy assignment operator" << std::endl;
 
     _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
-    _chatLogic = source._chatLogic;
-    _rootNode = source._rootNode;
+    _chatLogic = new ChatLogic( *source._chatLogic );
+    _rootNode = new GraphNode( *source._rootNode );
+    _currentNode = new GraphNode( *source._currentNode );
 
     return *this;
-
 }
 
 ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add
@@ -68,7 +70,7 @@ ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add
     {
         delete _image;  // causing the segmentation fault. Why?
     }
-    _image = source._image; // is this right or do you need a new new?
+    _image = source._image; // is this right or do you need a new new? moving on heap, so ok
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
 
@@ -86,7 +88,8 @@ ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add
     {
         delete _image;  // causing the segmentation fault. Why?
     }
-    _image = source._image; // is this right or do you need a new new?
+    _image = source._image; // is this right or do you need a new new? Since you are moving it
+                            // from own owner to another and it's on the heap, these should be okay..
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
 
