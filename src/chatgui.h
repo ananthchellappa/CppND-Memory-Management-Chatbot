@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>  // app.h in wx is where the main() is
 #include <memory>   // AC add so we can use smart pointers
+#include <iostream> // debug
 
 class ChatLogic; // forward declaration
 
@@ -15,18 +16,17 @@ private:
     wxBitmap _image;
 
     //// STUDENT CODE
-    ////
 
     // ChatLogic *_chatLogic;
     std::unique_ptr<ChatLogic> _chatLogic;  // why make unique if we return it from a get method? 
     // suggests std::unique_ptr<ChatLogic> _chatLogic;
-    ////
+
     //// EOF STUDENT CODE
 
 public:
     // constructor / destructor
     ChatBotPanelDialog(wxWindow *parent, wxWindowID id);
-    ~ChatBotPanelDialog();
+    ~ChatBotPanelDialog();  // we are violating rule of three? Now we also need the copy and copy assignment?
 
     // getter / setter
     ChatLogic *GetChatLogicHandle() { return _chatLogic.get(); }    // AC add .get() 

@@ -19,7 +19,7 @@ std::string imgBasePath = dataPath + "images/";
 bool ChatBotApp::OnInit()
 {
     // create window with name and show it
-    ChatBotFrame *chatBotFrame = new ChatBotFrame(wxT("Udacity ChatBot"));
+    ChatBotFrame *chatBotFrame = new ChatBotFrame(wxT("Udacity ChatBot"));  // where's the delete then?
     chatBotFrame->Show(true);
 
     return true;
@@ -116,30 +116,32 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
     wxInitAllImageHandlers();
 
     //// STUDENT CODE
-    ////
 
     // create chat logic instance
     // _chatLogic = new ChatLogic();
-    _chatLogic = std::make_unique<ChatLogic>(); // AC add
+    _chatLogic = std::make_unique<ChatLogic>(); // AC add.. don't know what else is needed :(
 
     // pass pointer to chatbot dialog so answers can be displayed in GUI
-    _chatLogic->SetPanelDialogHandle(this);
+    _chatLogic->SetPanelDialogHandle(this); // should we use std::move here?
 
     // load answer graph from file
     _chatLogic->LoadAnswerGraphFromFile(dataPath + "src/answergraph.txt");
 
-    ////
+    // why end here, why not after creating unique pointer?
     //// EOF STUDENT CODE
 }
 
 ChatBotPanelDialog::~ChatBotPanelDialog()
 {
     //// STUDENT CODE
-    ////
+    std::cout << "ChatBotPanelDialog desctructor" << std::endl; // verified is called
 
     // delete _chatLogic;  // since this is now a unique_ptr, it shouldn't need a delete
+    // if (_dialogSizer ){             // AC add
+    //     delete _dialogSizer;        // AC add
+    //     _dialogSizer = nullptr;     // AC add
+    // }
 
-    ////
     //// EOF STUDENT CODE
 }
 
