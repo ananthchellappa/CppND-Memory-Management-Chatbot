@@ -1,7 +1,8 @@
 #ifndef CHATGUI_H_
 #define CHATGUI_H_
 
-#include <wx/wx.h>
+#include <wx/wx.h>  // app.h in wx is where the main() is
+#include <memory>   // AC add so we can use smart pointers
 
 class ChatLogic; // forward declaration
 
@@ -16,8 +17,9 @@ private:
     //// STUDENT CODE
     ////
 
-    ChatLogic *_chatLogic;
-
+    // ChatLogic *_chatLogic;
+    std::unique_ptr<ChatLogic> _chatLogic;  // why make unique if we return it from a get method? 
+    // suggests std::unique_ptr<ChatLogic> _chatLogic;
     ////
     //// EOF STUDENT CODE
 
@@ -27,11 +29,11 @@ public:
     ~ChatBotPanelDialog();
 
     // getter / setter
-    ChatLogic *GetChatLogicHandle() { return _chatLogic; }
+    ChatLogic *GetChatLogicHandle() { return _chatLogic.get(); }    // AC add .get() 
 
     // events
     void paintEvent(wxPaintEvent &evt);
-    void paintNow();
+    void paintNow();        // draws background image
     void render(wxDC &dc);
 
     // proprietary functions
@@ -42,11 +44,12 @@ public:
 };
 
 // dialog item shown in ChatBotPanelDialog
+// "one item which can be either from the user or from the chatbot (???) "
 class ChatBotPanelDialogItem : public wxPanel
 {
 private:
     // control elements
-    wxStaticBitmap *_chatBotImg;
+    wxStaticBitmap *_chatBotImg;    // avatar image. handler to be retrieved from chatbot and displayed
     wxStaticText *_chatBotTxt;
 
 public:
@@ -60,7 +63,7 @@ class ChatBotFrame : public wxFrame
 private:
     // control elements
     ChatBotPanelDialog *_panelDialog;
-    wxTextCtrl *_userTextCtrl;
+    wxTextCtrl *_userTextCtrl;      // user text input field
 
     // events
     void OnEnter(wxCommandEvent &WXUNUSED(event));

@@ -109,7 +109,7 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
     : wxScrolledWindow(parent, id)
 {
     // sizer will take care of determining the needed scroll size
-    _dialogSizer = new wxBoxSizer(wxVERTICAL);
+    _dialogSizer = new wxBoxSizer(wxVERTICAL);  // since a new has been used, where is the delete?
     this->SetSizer(_dialogSizer);
 
     // allow for PNG images to be handled
@@ -138,7 +138,6 @@ ChatBotPanelDialog::~ChatBotPanelDialog()
     ////
 
     // delete _chatLogic;  // since this is now a unique_ptr, it shouldn't need a delete
-    delete _dialogSizer;
 
     ////
     //// EOF STUDENT CODE
