@@ -37,15 +37,66 @@ ChatBot::~ChatBot()
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
-        delete _image;  // causing the segmentation fault. Why?
-        _image = NULL;
+        delete _image;  // causing the segmentation fault. Why? coz it was used twice..
+        _image = NULL;  // if you only call d'tor once you're ok
     }
 }
 
 //// STUDENT CODE
-////
 
-////
+ChatBot::ChatBot( const ChatBot &source ){   // copy constructor
+    std::cout << "ChatBot copy constructor" << std::endl;
+    _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+}
+
+ChatBot & ChatBot::operator=(const ChatBot &source){  // copy assignment
+    std::cout << "ChatBot copy assignment operator" << std::endl;
+
+    _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    return *this;
+
+}
+
+ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add
+    std::cout << "ChatBot move constructor" << std::endl;
+    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    {
+        delete _image;  // causing the segmentation fault. Why?
+    }
+    _image = source._image; // is this right or do you need a new new?
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+}
+ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add
+    std::cout << "ChatBot move assignment operator" << std::endl;
+    if (this == &source )
+        return *this;
+    // else
+
+    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    {
+        delete _image;  // causing the segmentation fault. Why?
+    }
+    _image = source._image; // is this right or do you need a new new?
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+
+    return *this;
+}
+
 //// EOF STUDENT CODE
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
