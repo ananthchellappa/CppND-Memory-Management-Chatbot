@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "chatbot.h"
+#include <memory> // AC for use of unique_ptr
 
 
 // forward declarations
@@ -16,10 +17,14 @@ private:
     ////
 
     // data handles (owned)
-    std::vector<GraphEdge *> _childEdges;  // edges to subsequent nodes
+    // std::vector<GraphEdge *> _childEdges;  // edges to subsequent nodes  .. AC 
+    std::vector< std::unique_ptr< GraphEdge > > _childEdges;    // AC add Task 4
 
     // data handles (not owned)
-    std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
+    std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes // we are downstream.. What to do here?
+                                          // what smart pointer for a non-owning reference? Why weak_ptr? 
+    // std::vector< std::weak_ptr< GraphEdge > > _parentEdges;     // AC add
+
     ChatBot *_chatBot;
 
     ////
@@ -44,7 +49,8 @@ public:
     // proprietary functions
     void AddToken(std::string token); // add answers to list
     void AddEdgeToParentNode(GraphEdge *edge);
-    void AddEdgeToChildNode(GraphEdge *edge);
+    // void AddEdgeToChildNode(GraphEdge *edge);   // also not called out by STUDENT CODE
+    void AddEdgeToChildNode( std::unique_ptr<GraphEdge> edge ); // AC Task 4, use std::move to pass
 
     //// STUDENT CODE
     ////

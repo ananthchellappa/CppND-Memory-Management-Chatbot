@@ -18,8 +18,11 @@ private:
     ////
 
     // data handles (owned)
-    std::vector< std::unique_ptr<GraphNode> > _nodes;
-    std::vector< GraphEdge * > _edges;
+    std::vector< std::unique_ptr<GraphNode> > _nodes;   // AC Task 3
+    // std::vector< GraphEdge * > _edges;      // should we do weak pointers? AC
+    // std::vector< std::unique_ptr<GraphEdge> > _edges;      // should we do weak pointers? AC
+    // because, there will always be one exclusive owner .. AC -- originates from Task 4
+    // why do we need this if this is being maintained in the nodes per Task 4? Referred to leandrofahur github
 
     ////
     //// EOF STUDENT CODE

@@ -22,14 +22,16 @@ void GraphNode::AddToken(std::string token)
     _answers.push_back(token);
 }
 
-void GraphNode::AddEdgeToParentNode(GraphEdge *edge)
+void GraphNode::AddEdgeToParentNode(GraphEdge *edge)    // incoming
 {
-    _parentEdges.push_back(edge);
+    _parentEdges.push_back(edge);    // AC.. no change
+    // _parentEdges.push_back( std::weak_ptr<GraphEdge> edge );    // AC add -- don't know if it's needed..
 }
 
-void GraphNode::AddEdgeToChildNode(GraphEdge *edge)
+void GraphNode::AddEdgeToChildNode( std::unique_ptr<GraphEdge> edge) // AC from GraphEdge * outgoing
 {
-    _childEdges.push_back(edge);
+    // _childEdges.push_back(edge);    // AC .. how can this be retained? We need to push unique pointers!
+    _childEdges.push_back( std::move( edge ) );    // AC add
 }
 
 //// STUDENT CODE
@@ -53,7 +55,7 @@ GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
     //// STUDENT CODE
     ////
 
-    return _childEdges[index];
+    return _childEdges[index].get();    // AC added .get() .. why isn't it ->get()?
 
     ////
     //// EOF STUDENT CODE

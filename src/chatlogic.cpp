@@ -22,7 +22,7 @@ ChatLogic::ChatLogic()
     // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
     _chatBot->SetChatLogicHandle(this);
 
-    _nodes = {};    // initialized to empty // after using const auto & for the lambda fns, this comment fixes errors
+    // _nodes = {};    // initialized to empty // after using const auto & for the lambda fns, this comment fixes errors
 
     //// EOF STUDENT CODE
 }
@@ -42,10 +42,10 @@ ChatLogic::~ChatLogic()
     // }
 
     // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
+    // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
+    // {
+    //     // delete *it;     // AC Task 4 - unique_ptr should not be deleted
+    // }
 
     //// EOF STUDENT CODE
 }
@@ -171,17 +171,19 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             // AC from GraphNode *node
 
                             // create new edge
-                            GraphEdge *edge = new GraphEdge(id);
+                            // GraphEdge *edge = new GraphEdge(id);    // AC ..
+                            std::unique_ptr<GraphEdge> edge( new GraphEdge(id) ) ;  // AC add Task 4
                             edge->SetChildNode(childNode->get() );  // AC : *childN --> childN->get() -- is this okay to send the raw?
                             edge->SetParentNode( parentNode->get() );   // AC saa
-                            _edges.push_back(edge);
+                            // _edges.push_back(edge);     // AC original - why won't it work?
+                            // _edges.push_back( std::move(edge) );     // AC Task 4 .. but, no longer needed..
 
                             // find all keywords for current node
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge);
-                            (*parentNode)->AddEdgeToChildNode(edge);
+                            (*childNode)->AddEdgeToParentNode(edge.get() );     // AC Task 4
+                            (*parentNode)->AddEdgeToChildNode( std::move(edge) );   // AC Task 4
                         }
 
                         ////
