@@ -15,31 +15,31 @@
 ChatLogic::ChatLogic()
 {
     //// STUDENT CODE
-    ////
-
+    std::cout << "ChatLogic Constructor" << std::endl;
     // create instance of chatbot
     _chatBot = new ChatBot("../images/chatbot.png");
 
     // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
     _chatBot->SetChatLogicHandle(this);
 
-    ////
+    _nodes = {};    // initialized to empty // after using const auto & for the lambda fns, this comment fixes errors
+
     //// EOF STUDENT CODE
 }
 
 ChatLogic::~ChatLogic()
 {
     //// STUDENT CODE
-    ////
-
+    std::cout << "ChatLogic Desctructor" << std::endl;
+    
     // delete chatbot instance
     delete _chatBot;
 
-    // delete all nodes
-    for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
-    {
-        delete *it;
-    }
+    // delete all nodes // AC comment out
+    // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
+    // {
+    //     // delete *it;  // since it's now a unique pointer.. right? // AC tweak
+    // }
 
     // delete all edges
     for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
@@ -47,7 +47,6 @@ ChatLogic::~ChatLogic()
         delete *it;
     }
 
-    ////
     //// EOF STUDENT CODE
 }
 
@@ -71,6 +70,7 @@ void ChatLogic::AddAllTokensToElement(std::string tokenID, tokenlist &tokens, T 
     }
 }
 
+// whoever wrote this needs to watch Venkat's talk - the ultimate abominable long method. Refactor!
 void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 {
     // load file with answer graph elements
@@ -110,11 +110,13 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
             }
 
             // process tokens for current line
-            auto type = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "TYPE"; });
+            auto type = std::find_if(tokens.begin(), tokens.end(), 
+                [](const std::pair<std::string, std::string> &pair) { return pair.first == "TYPE"; });
             if (type != tokens.end())
             {
                 // check for id
-                auto idToken = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "ID"; });
+                auto idToken = std::find_if(tokens.begin(), tokens.end(), 
+                    [](const std::pair<std::string, std::string> &pair) { return pair.first == "ID"; });
                 if (idToken != tokens.end())
                 {
                     // extract id from token
@@ -127,12 +129,15 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         ////
 
                         // check if node with this ID exists already
-                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](GraphNode *node) { return node->GetID() == id; });
+                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), 
+                            [&id](const auto& node) { return node->GetID() == id; }); // AC
+                            // AC from GraphNode *node to unique_ptr & (first tried jsut unique_ptr)
 
                         // create new element if ID does not yet exist
                         if (newNode == _nodes.end())
                         {
-                            _nodes.emplace_back(new GraphNode(id));
+                            // _nodes.emplace_back(new GraphNode(id));                     // AC Task 3
+                            _nodes.emplace_back( std::make_unique<GraphNode>(id)  );    // AC add Task 3
                             newNode = _nodes.end() - 1; // get iterator to last element
 
                             // add all answers to current node
@@ -150,19 +155,25 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         ////
 
                         // find tokens for incoming (parent) and outgoing (child) node
-                        auto parentToken = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "PARENT"; });
-                        auto childToken = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "CHILD"; });
+                        auto parentToken = std::find_if(tokens.begin(), tokens.end(), 
+                        [](const std::pair<std::string, std::string> &pair) { return pair.first == "PARENT"; });
+                        auto childToken = std::find_if(tokens.begin(), tokens.end(), 
+                        [](const std::pair<std::string, std::string> &pair) { return pair.first == "CHILD"; });
 
                         if (parentToken != tokens.end() && childToken != tokens.end())
                         {
                             // get iterator on incoming and outgoing node via ID search
-                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](GraphNode *node) { return node->GetID() == std::stoi(parentToken->second); });
-                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](GraphNode *node) { return node->GetID() == std::stoi(childToken->second); });
+                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), 
+                            [&parentToken](const auto &node) { return node->GetID() == std::stoi(parentToken->second); });
+                            // AC from GraphNode *node
+                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), 
+                            [&childToken](const auto &node) { return node->GetID() == std::stoi(childToken->second); });
+                            // AC from GraphNode *node
 
                             // create new edge
                             GraphEdge *edge = new GraphEdge(id);
-                            edge->SetChildNode(*childNode);
-                            edge->SetParentNode(*parentNode);
+                            edge->SetChildNode(childNode->get() );  // AC : *childN --> childN->get() -- is this okay to send the raw?
+                            edge->SetParentNode( parentNode->get() );   // AC saa
                             _edges.push_back(edge);
 
                             // find all keywords for current node
@@ -206,7 +217,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
             if (rootNode == nullptr)
             {
-                rootNode = *it; // assign current node to root
+                rootNode = it->get(); // assign current node to root    // AC : *it --> 
             }
             else
             {
