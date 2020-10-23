@@ -74,10 +74,12 @@ ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add Task 2
     _image = source._image; // is this right or do you need a new new? moving on heap, so ok
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
 
     source._image = nullptr;
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
 }
 ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add Task 2
     std::cout << "ChatBot move assignment operator" << std::endl;
@@ -93,10 +95,13 @@ ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add Task
                             // from own owner to another and it's on the heap, these should be okay..
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+
 
     source._image = nullptr;
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
 
     return *this;
 }

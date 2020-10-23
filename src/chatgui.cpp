@@ -134,7 +134,7 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
 ChatBotPanelDialog::~ChatBotPanelDialog()
 {
     //// STUDENT CODE
-    std::cout << "ChatBotPanelDialog desctructor" << std::endl; // verified is called
+    std::cout << "ChatBotPanelDialog destructor" << std::endl; // verified is called
 
     // delete _chatLogic;  // since this is now a unique_ptr, it shouldn't need a delete
     // if (_dialogSizer ){             // AC add
