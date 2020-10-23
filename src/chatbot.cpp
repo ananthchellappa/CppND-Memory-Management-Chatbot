@@ -45,7 +45,7 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 
-ChatBot::ChatBot( const ChatBot &source ){   // copy constructor
+ChatBot::ChatBot( const ChatBot &source ){   // copy constructor    AC Task 2
     std::cout << "ChatBot copy constructor" << std::endl;
     _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
     _chatLogic = source._chatLogic;     // why is it not *source here? because 
@@ -53,7 +53,7 @@ ChatBot::ChatBot( const ChatBot &source ){   // copy constructor
     _currentNode = source._currentNode; // these are not owned, so pointing to the same thing is ok..
 }
 
-ChatBot & ChatBot::operator=(const ChatBot &source){  // copy assignment
+ChatBot & ChatBot::operator=(const ChatBot &source){  // copy assignment AC Task 2
     std::cout << "ChatBot copy assignment operator" << std::endl;
 
     _image = new wxBitmap( *source._image );    // referred Junzhoudu's github
@@ -65,7 +65,7 @@ ChatBot & ChatBot::operator=(const ChatBot &source){  // copy assignment
 
 }
 
-ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add
+ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add Task 2
     std::cout << "ChatBot move constructor" << std::endl;
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
@@ -79,7 +79,7 @@ ChatBot::ChatBot( ChatBot &&source){     // move constructor AC add
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
 }
-ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add
+ChatBot & ChatBot::operator=( ChatBot &&source){  // move assignment AC add Task 2
     std::cout << "ChatBot move assignment operator" << std::endl;
     if (this == &source )
         return *this;

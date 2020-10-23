@@ -228,12 +228,13 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
         }
     }
     // AC Task 5
-    _chatBot = std::make_unique<ChatBot>( CB_IMAGE );   // AC Task 5 defined in chatbot.h
+    std::unique_ptr<ChatBot> chatBot = std::make_unique<ChatBot>( CB_IMAGE );   // AC Task 5 defined in chatbot.h
+    _chatBot = chatBot.get();
     _chatBot->SetChatLogicHandle(this);     // AC Task 5 -- since this was in the constructor before
 
     // add chatbot to graph root node
     _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere( std::move(_chatBot) ) ; // AC Task 5 -- use of move semantics
+    rootNode->MoveChatbotHere( std::move( chatBot) ) ; // AC Task 5 -- use of move semantics
     
     ////
     //// EOF STUDENT CODE

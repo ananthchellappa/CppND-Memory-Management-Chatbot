@@ -29,8 +29,9 @@ private:
 
     // data handles (not owned)
     GraphNode *_currentNode;
-    // ChatBot *_chatBot;      // AC Task 5
-    std::unique_ptr<ChatBot> _chatBot;  // AC Task 5
+    ChatBot *_chatBot;      // AC Task 5
+    // std::unique_ptr<ChatBot> _chatBot;  // AC Task 5    // this is wrong - it's owned by the nodes.. so this must be raw..
+                                        // but, how do you know the dangling pointer won't be used?
     ChatBotPanelDialog *_panelDialog;
 
     // proprietary type definitions
