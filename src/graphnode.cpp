@@ -36,16 +36,17 @@ void GraphNode::AddEdgeToChildNode( std::unique_ptr<GraphEdge> edge) // AC from 
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(std::unique_ptr<ChatBot> chatbot) // AC Task 5 from ChatBot *
 {
-    _chatBot = chatbot;
+    // _chatBot = chatbot;     // can't do this with unique_ptr, right? AC Task 5
+    _chatBot = std::move( chatbot );    // AC Task 5
     _chatBot->SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr; // invalidate pointer at source
+    newNode->MoveChatbotHere( std::move(_chatBot) );    // AC Task 5
+    // _chatBot = nullptr; // invalidate pointer at source // AC Task 5 -- with unique_ptr, should be auto'd
 }
 ////
 //// EOF STUDENT CODE

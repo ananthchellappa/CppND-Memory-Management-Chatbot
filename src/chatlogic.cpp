@@ -17,10 +17,10 @@ ChatLogic::ChatLogic()
     //// STUDENT CODE
     std::cout << "ChatLogic Constructor" << std::endl;
     // create instance of chatbot
-    _chatBot = new ChatBot("../images/chatbot.png");
+    // _chatBot = new ChatBot("../images/chatbot.png");     // AC Task 5 -- since we will now use the stack
 
     // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
+    // _chatBot->SetChatLogicHandle(this);  // AC Task 5 since this will be created elsewhere
 
     // _nodes = {};    // initialized to empty // after using const auto & for the lambda fns, this comment fixes errors
 
@@ -33,7 +33,7 @@ ChatLogic::~ChatLogic()
     std::cout << "ChatLogic Desctructor" << std::endl;
     
     // delete chatbot instance
-    delete _chatBot;
+    // delete _chatBot;    // AC Task 5 - once you convert to unique_ptr, no more need to delete
 
     // delete all nodes // AC comment out
     // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
@@ -227,10 +227,13 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
             }
         }
     }
+    // AC Task 5
+    _chatBot = std::make_unique<ChatBot>( CB_IMAGE );   // AC Task 5 defined in chatbot.h
+    _chatBot->SetChatLogicHandle(this);     // AC Task 5 -- since this was in the constructor before
 
     // add chatbot to graph root node
     _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);
+    rootNode->MoveChatbotHere( std::move(_chatBot) ) ; // AC Task 5 -- use of move semantics
     
     ////
     //// EOF STUDENT CODE
@@ -241,10 +244,10 @@ void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog *panelDialog)
     _panelDialog = panelDialog;
 }
 
-void ChatLogic::SetChatbotHandle(ChatBot *chatbot)
-{
-    _chatBot = chatbot;
-}
+// void ChatLogic::SetChatbotHandle(ChatBot *chatbot)   // AC Task 5 -- not being used anywhere
+// {
+//     _chatBot = chatbot;
+// }
 
 void ChatLogic::SendMessageToChatbot(std::string message)
 {

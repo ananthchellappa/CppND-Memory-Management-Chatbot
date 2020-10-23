@@ -3,6 +3,7 @@
 
 #include <wx/bitmap.h>
 #include <string>
+#define CB_IMAGE "../images/chatbot.png"
 
 class GraphNode; // forward declaration
 class ChatLogic; // forward declaration

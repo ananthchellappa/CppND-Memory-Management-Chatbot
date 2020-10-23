@@ -29,7 +29,8 @@ private:
 
     // data handles (not owned)
     GraphNode *_currentNode;
-    ChatBot *_chatBot;
+    // ChatBot *_chatBot;      // AC Task 5
+    std::unique_ptr<ChatBot> _chatBot;  // AC Task 5
     ChatBotPanelDialog *_panelDialog;
 
     // proprietary type definitions

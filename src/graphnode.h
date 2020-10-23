@@ -25,7 +25,8 @@ private:
                                           // what smart pointer for a non-owning reference? Why weak_ptr? 
     // std::vector< std::weak_ptr< GraphEdge > > _parentEdges;     // AC add
 
-    ChatBot *_chatBot;
+    // ChatBot *_chatBot;  // AC Task 5
+    std::unique_ptr<ChatBot> _chatBot;
 
     ////
     //// EOF STUDENT CODE
@@ -55,7 +56,7 @@ public:
     //// STUDENT CODE
     ////
 
-    void MoveChatbotHere(ChatBot *chatbot);
+    void MoveChatbotHere( std::unique_ptr<ChatBot> chatbot);    // AC Task 5 was ChatBot *
 
     ////
     //// EOF STUDENT CODE
