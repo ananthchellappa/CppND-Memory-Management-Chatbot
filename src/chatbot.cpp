@@ -44,6 +44,61 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+ChatBot::ChatBot( const ChatBot & source ){   // copy constructor
+    // ChatBot cb1( cb_already_exists );
+    _image = new wxBitmap( *source._image );
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle( this );
+}
+
+ChatBot & ChatBot::operator=( const ChatBot & source ){ // copy assignment constructor
+    // ChatBot cb1;
+    // cb1 = cb_already_exists;
+    if(_image != NULL && _image != nullptr ) // Attention: wxWidgets used NULL and not nullptr
+    {
+        delete _image;
+    }
+    _image = new wxBitmap( *source._image );
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;    
+    _chatLogic->SetChatbotHandle( this );
+    return *this;
+}
+
+ChatBot::ChatBot( ChatBot && source ){      // move constructor
+    // ChatBot  cb1( std::move( cb2 ) ) // basically, generate an lvalue from an rvalue
+    _image = source._image;
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+    _chatLogic->SetChatbotHandle( this );
+
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._currentNode = nullptr;
+}   
+ChatBot & ChatBot::operator=( ChatBot && source ){   // move assignment constructor
+    // ChatBot cb1;
+    // cb1 = std::move( cb_already_exists );
+
+    _image = new wxBitmap( *source._image );     // assume that an overloaded constructor exists
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;    
+    _chatLogic->SetChatbotHandle( this );
+
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._currentNode = nullptr;
+
+    return *this;    
+}
+
 
 ////
 //// EOF STUDENT CODE
