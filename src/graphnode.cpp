@@ -35,18 +35,15 @@ void GraphNode::AddEdgeToChildNode( std::unique_ptr<GraphEdge> edge )
 
 //// STUDENT CODE
 ////
-// void GraphNode::MoveChatbotHere(ChatBot *chatbot)    // AC Task 5
-void GraphNode::MoveChatbotHere(std::unique_ptr<ChatBot> chatbot)   // AC Task 5
+void GraphNode::MoveChatbotHere(ChatBot &chatbot)    // AC Task 5   from *chatbot
 {
-    // _chatBot = chatbot;     // AC Task 5 ... use of deleted fn..
-    _chatBot = std::move( chatbot );    // AC Task 5
-    _chatBot->SetCurrentNode(this);
+    _chatBot = chatbot;
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere( std::move(_chatBot) );     // AC Task 5 from (_chatBot)
-    // _chatBot = nullptr; // invalidate pointer at source  // AC Task 5 - smart ptr should do this auto
+    newNode->MoveChatbotHere( _chatBot );
 }
 ////
 //// EOF STUDENT CODE
