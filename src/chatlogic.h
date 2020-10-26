@@ -22,7 +22,7 @@ private:
     std::vector< std::unique_ptr<GraphNode> > _nodes;   // AC Task 3
 
 
-    std::vector<GraphEdge *> _edges;
+    // std::vector<GraphEdge *> _edges; // AC Task 4 - now owned by the nodes, not ChatLogic
 
     ////
     //// EOF STUDENT CODE

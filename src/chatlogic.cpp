@@ -41,11 +41,11 @@ ChatLogic::~ChatLogic()
     //     delete *it;  // AC Task 3 -- since these are now smart pointers
     // }
 
-    // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
+    // // delete all edges
+    // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
+    // {
+    //     delete *it;  // AC Task 4 -- since these are now owned by the GraphNodes
+    // }
 
     ////
     //// EOF STUDENT CODE
@@ -171,17 +171,20 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                                 [&childToken](const auto &node) { return node->GetID() == std::stoi(childToken->second); });  // AC Task 3
 
                             // create new edge
-                            GraphEdge *edge = new GraphEdge(id);
+                            // GraphEdge *edge = new GraphEdge(id); // AC Task 4
+                            std::unique_ptr<GraphEdge> edge = std::make_unique<GraphEdge>(id); // AC Task 4
+
                             edge->SetChildNode( childNode->get() ); // AC Task 3 from *childNode
                             edge->SetParentNode( parentNode->get() );   // AC Task 3 from *parentNode
-                            _edges.push_back(edge);
+                            // _edges.push_back(edge); // AC Task 4 -- if you move here, then edge becomes null
+                                                    // _edges doesn't exist anymore anyway..
 
                             // find all keywords for current node
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge);
-                            (*parentNode)->AddEdgeToChildNode(edge);
+                            (*childNode)->AddEdgeToParentNode( edge.get() );  // AC Task 4 from (edge)
+                            (*parentNode)->AddEdgeToChildNode( std::move(edge) );   // AC Task 4 saa
                         }
 
                         ////

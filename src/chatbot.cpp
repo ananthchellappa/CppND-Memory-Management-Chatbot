@@ -46,6 +46,8 @@ ChatBot::~ChatBot()
 ////
 ChatBot::ChatBot( const ChatBot & source ){   // copy constructor
     // ChatBot cb1( cb_already_exists );
+    std::cout << "ChatBot Copy constructor" << std::endl;
+
     _image = new wxBitmap( *source._image );
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
@@ -53,9 +55,10 @@ ChatBot::ChatBot( const ChatBot & source ){   // copy constructor
     _chatLogic->SetChatbotHandle( this );
 }
 
-ChatBot & ChatBot::operator=( const ChatBot & source ){ // copy assignment constructor
+ChatBot & ChatBot::operator=( const ChatBot & source ){ // copy assignment Operator
     // ChatBot cb1;
     // cb1 = cb_already_exists;
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
     if(_image != NULL && _image != nullptr ) // Attention: wxWidgets used NULL and not nullptr
     {
         delete _image;
@@ -70,6 +73,8 @@ ChatBot & ChatBot::operator=( const ChatBot & source ){ // copy assignment const
 
 ChatBot::ChatBot( ChatBot && source ){      // move constructor
     // ChatBot  cb1( std::move( cb2 ) ) // basically, generate an lvalue from an rvalue
+    std::cout << "ChatBot Move constructor" << std::endl;
+
     _image = source._image;
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
@@ -81,9 +86,10 @@ ChatBot::ChatBot( ChatBot && source ){      // move constructor
     source._rootNode = nullptr;
     source._currentNode = nullptr;
 }   
-ChatBot & ChatBot::operator=( ChatBot && source ){   // move assignment constructor
+ChatBot & ChatBot::operator=( ChatBot && source ){   // move assignment operator
     // ChatBot cb1;
     // cb1 = std::move( cb_already_exists );
+    std::cout << "ChatBot Move assignment operator" << std::endl;
 
     _image = new wxBitmap( *source._image );     // assume that an overloaded constructor exists
     _chatLogic = source._chatLogic;
