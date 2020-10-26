@@ -53,7 +53,9 @@ public:
     ////
 
     // void MoveChatbotHere(ChatBot *chatbot); // AC Task 5
-    void MoveChatbotHere( ChatBot & chatbot);    // AC Task 5
+    // void MoveChatbotHere( ChatBot & chatbot);    // AC Task 5
+    void MoveChatbotHere( ChatBot chatbot );
+
 
     ////
     //// EOF STUDENT CODE

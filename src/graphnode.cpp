@@ -35,15 +35,18 @@ void GraphNode::AddEdgeToChildNode( std::unique_ptr<GraphEdge> edge )
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot &chatbot)    // AC Task 5   from *chatbot
+// void GraphNode::MoveChatbotHere(ChatBot &chatbot)    // AC Task 5   from *chatbot
+void GraphNode::MoveChatbotHere(ChatBot chatbot)    // AC Task 5   from &chatbot
 {
-    _chatBot = chatbot;
+    // _chatBot = chatbot; // AC Task 5  -- also works, but not using move semantics as proj asks
+    _chatBot = std::move( chatbot );    // std::move nothing to do with smart ptr here - but to create lvalue from rvalue
     _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere( _chatBot );
+    // newNode->MoveChatbotHere( _chatBot );    // also works, but not using move semantics
+    newNode->MoveChatbotHere( std::move(_chatBot) ) ;    // AC Task 5
 }
 ////
 //// EOF STUDENT CODE
