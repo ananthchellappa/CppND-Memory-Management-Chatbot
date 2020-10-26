@@ -5,6 +5,7 @@
 #include <string>
 #include "chatgui.h"
 #include <memory> // for unique_ptr Task 3
+#define CB_IMAGE "../images/chatbot.png"   // AC Task 5 -- not reqd but neater
 
 // forward declarations
 class ChatBot;
